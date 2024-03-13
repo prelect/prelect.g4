@@ -1,9 +1,13 @@
 {
   "name": "@prelect/prelect.g4",
-  "version": "2027.0.0",
+  "version": "2027.0.2",
   "description": "This is the antlr4-compatible EBNF syntax for the PRELECT programming language project.",
   "main": "index.js",
   "scripts": {
+    "getAntlr": "wget --show-progress -O ./antlr.jar https://www.antlr.org/download/antlr-4.13.1-complete.jar",
+    "bind": "java -jar ./antlr.jar -Dlanguage=JavaScript -o bindings prelectLexer.g4 prelectParser.g4",
+    "tree": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.xpl -tree",
+    "gui": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.xpl -gui",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {
@@ -17,7 +21,7 @@
   "author": "frithsun",
   "license": "MIT",
   "bugs": {
-    "url": "https://github.com/prelect/prelect.g4/issues"
+    "url": "https://github.com/prelect/prelect/issues"
   },
   "homepage": "https://github.com/prelect/prelect.g4#readme"
 }
