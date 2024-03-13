@@ -1,13 +1,13 @@
 {
   "name": "@prelect/prelect.g4",
-  "version": "2027.0.2",
+  "version": "2027.0.4",
   "description": "This is the antlr4-compatible EBNF syntax for the PRELECT programming language project.",
   "main": "index.js",
   "scripts": {
-    "getAntlr": "wget --show-progress -O ./antlr.jar https://www.antlr.org/download/antlr-4.13.1-complete.jar",
-    "bind": "java -jar ./antlr.jar -Dlanguage=JavaScript -o bindings prelectLexer.g4 prelectParser.g4",
-    "tree": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.xpl -tree",
-    "gui": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.xpl -gui",
+    "getJar": "curl https://www.antlr.org/download/antlr-4.13.1-complete.jar --create-dirs -o ./antlr.jar",
+    "build": "java -jar ./antlr.jar -Dlanguage=JavaScript -o dist prelectLexer.g4 prelectParser.g4",
+    "tree": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -tree",
+    "gui": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -gui",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "repository": {

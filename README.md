@@ -5,14 +5,18 @@
 This is the antlr4-compatible EBNF syntax for the PRELECT programming language
 project.
 
-## Testing
+## Getting Started
 
 Install [ANTLR](https://www.antlr.org/) on your system by any means necessary.
 
-Create a nested syntax tree of some sample code you've written to `./test.xpl`
+This script downloads the jar file necessary to build the bindings.
 
-    antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test.xpl -tree
+    npm run getJar
 
-Visualize the syntax tree.
+This script runs a tree test of the `./test/test.en.xpl` file.
 
-    antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test.xpl -gui
+    npm run tree
+
+If you install the repo locally and have antlr installed correctly, try this:
+
+    npm run gui
