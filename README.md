@@ -3,7 +3,7 @@
 ## Description
 
 This is the antlr4-compatible EBNF syntax for the PRELECT programming language
-project. It's intended to be embedded as a submodule within the main project.
+project.
 
 ## Testing
 
