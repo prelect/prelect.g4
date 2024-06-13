@@ -11,7 +11,7 @@ ParenClose: ')';
 TableOpen: '[';
 TableClose: ']';
 
-FormulaChar: [-~!@#$%^&_+*=<>?/]+ ParenOpen;
+FormulaChar: ('..' | [-~!@#$%^&_+*=<>?/]+) ParenOpen;
 
 Context: '%%%';
 Caught: '%%';
@@ -19,7 +19,8 @@ Placeholder: '%';
 Star: '*';
 Bang: '!';
 Assign: ':';
-Pipe: '|';
+CommaPipe: ',';
+SemicolonPipe: ';';
 ParentCall: '\\\\';
 
 Nulll: '~';

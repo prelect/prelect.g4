@@ -1,8 +1,6 @@
 parser grammar prelectParser;
 
-// add .. range operator
 // add join operators
-// 
 
 options { tokenVocab = prelectLexer; }
 
@@ -12,7 +10,7 @@ freeFormulaic: formulaicPiped;
 
 formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
 formulaicPiped: formulaic piped?;
-piped: Pipe alias? formulaicPiped;
+piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
 alias: Name Assign;
 
 formulaic: field | table | range | number | string | context | caught | placeholder | nulll | formulaCall | exceptional;
