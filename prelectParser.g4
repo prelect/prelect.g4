@@ -9,17 +9,21 @@ parse: (patchDef | freeFormulaic)* EOF;
 freeFormulaic: formulaicPiped;
 
 formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
-formulaicPiped: formulaic piped?;
+formulaicPiped: formulaic piped? pipeTerm?;
+pipeTerm: changeCaught | return;
+changeCaught: '.';
+return: Bang;
 piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
 alias: Name Assign;
 
-formulaic: field | table | range | number | string | context | caught | placeholder | nulll | formulaCall | exceptional;
+formulaic: field | table | range | number | string | input | model | caught | placeholder | nulll | formulaCall | exceptional;
 
 formulaCall: parentCall? formulaName formulaCallItem* ParenClose;
 formulaName: (field ParenOpen | FormulaChar+);
 formulaCallItem: (name Assign)? formulaic | pattern;
 parentCall: ParentCall;
-context: Context;
+input: Input;
+model: Model;
 caught: Caught;
 placeholder: Placeholder;
 
@@ -63,9 +67,7 @@ typeName: Name;
 
 name: Name;
 module: Name;
-dot: '.';
-field: (module dot)? name;
-
+field: (module '.')? name;
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
 range: Range;

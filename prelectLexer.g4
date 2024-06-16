@@ -13,7 +13,8 @@ TableClose: ']';
 
 FormulaChar: ('..' | [-~!@#$%^&_+*=<>?/]+) ParenOpen;
 
-Context: '%%%';
+Input: '%%%%';
+Model: '%%%';
 Caught: '%%';
 Placeholder: '%';
 Star: '*';
@@ -52,7 +53,6 @@ fragment OctalDigit: [0-7];
 fragment ExponentPart: [eE] [+-]? DecimalDigit+;
 
 Ws: [\p{White_Space}] -> skip;
-Comment: '#*' .*? '*#' -> channel(COMMENTS);
 CommentLine: '##' ~[\r\n\p{Zl}]+ -> channel(COMMENTS);
 Annotation: '#:' ~[\r\n\p{Zl}]+ -> channel(ANNOTATIONS);
 HashBang: '#!' ~[\r\n\p{Zl}]+ -> channel(HASHBANG);
