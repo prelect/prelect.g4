@@ -16,7 +16,7 @@ return: Bang;
 piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
 alias: Name Assign;
 
-formulaic: field | table | range | number | string | input | model | caught | placeholder | nulll | formulaCall | exceptional;
+formulaic: field | table | number | string | input | model | caught | placeholder | nulll | formulaCall | exceptional;
 
 formulaCall: parentCall? formulaName formulaCallItem* ParenClose;
 formulaName: (field ParenOpen | FormulaChar+);
@@ -70,7 +70,6 @@ module: Name;
 field: (module '.')? name;
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
-range: Range;
 decimalInteger: DecimalInteger;
 decimal: Decimal;
 hexInteger: HexInteger;
@@ -87,10 +86,7 @@ pathDirect: PATH_Dir;
 pathDig: PATH_Dig;
 pathField: PATH_FieldOpen formulaic? CurlyClose;
 
-pattern:
-	PATTERN_Open
-	(patternPart | patternField)*
-	PATTERN_Close;
+pattern: PATTERN_Open (patternPart | patternField)* PATTERN_Close;
 
 patternPart: PATTERN_Part+;
 patternField: PATTERN_FieldOpen formulaic? CurlyClose;

@@ -8,7 +8,7 @@
     "build": "java -jar ./antlr.jar -Dlanguage=JavaScript -o dist prelectLexer.g4 prelectParser.g4",
     "tree": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -tree",
     "gui": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -gui",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "syntax": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/syntax.en.xpl -tree"
   },
   "repository": {
     "type": "git",

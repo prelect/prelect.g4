@@ -45,15 +45,13 @@ Decimal: '-'? DecimalInteger (
 
 Name: [\p{L}_-] [\p{L}\p{N}_-]*;
 
-Range: '-'? DecimalInteger '..' '-'? DecimalInteger;
-
 fragment DecimalDigit: [0-9];
 fragment HexDigit: [0-9a-fA-F];
 fragment OctalDigit: [0-7];
 fragment ExponentPart: [eE] [+-]? DecimalDigit+;
 
 Ws: [\p{White_Space}] -> skip;
-CommentLine: '##' ~[\r\n\p{Zl}]+ -> channel(COMMENTS);
+Comment: '##' ~[\r\n\p{Zl}]+ -> channel(COMMENTS);
 Annotation: '#:' ~[\r\n\p{Zl}]+ -> channel(ANNOTATIONS);
 HashBang: '#!' ~[\r\n\p{Zl}]+ -> channel(HASHBANG);
 
