@@ -37,7 +37,7 @@ DecimalInteger: '0' | [1-9] (DecimalDigit | ',')* | DecimalDigit+ ExponentPart;
 
 DecimalSigned: '-'? DecimalInteger;
 
-Decimal: '-'? DecimalInteger (
+Decimal: '-'? [1-9] (
         '.' DecimalDigit* ExponentPart?
         | DecimalDigit+ ExponentPart?
         | DecimalInteger ExponentPart?

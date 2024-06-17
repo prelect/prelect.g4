@@ -31,4 +31,4 @@
 ## *(6 7) ## Multiply
 ## **(6.49 2) ## Raise to the power of
 
-(a b c)[1 2 3]! !(a)
+088
