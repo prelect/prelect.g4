@@ -45,6 +45,8 @@ Decimal: '-'? [1-9] (
 
 Name: [\p{L}_-] [\p{L}\p{N}_-]*;
 
+Dot: '.';
+
 fragment DecimalDigit: [0-9];
 fragment HexDigit: [0-9a-fA-F];
 fragment OctalDigit: [0-7];
@@ -58,9 +60,11 @@ HashBang: '#!' ~[\r\n\p{Zl}]+ -> channel(HASHBANG);
 CurlyOpen: '{' -> pushMode(DEFAULT_MODE);
 CurlyClose: '}' -> popMode;
 
-PATH_Rela_Open: '//' -> pushMode(PATH);
+PATH_Relative_Open: '//' -> pushMode(PATH);
 PATH_Root_Open: '/' -> pushMode(PATH);
-PATH_Curr_Open: '.' -> pushMode(PATH);
+PATH_Parent_Open: '../' -> pushMode(PATH);
+PATH_Current_Open: './' -> pushMode(PATH);
+
 PATTERN_Open: '^' -> pushMode(PATTERN);
 
 StringOpen: '`' -> pushMode(STRING);

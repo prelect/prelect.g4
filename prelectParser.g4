@@ -1,18 +1,18 @@
 parser grammar prelectParser;
 
-// add join operators
-
 options { tokenVocab = prelectLexer; }
 
 parse: (patchDef | freeFormulaic)* EOF;
 
-freeFormulaic: formulaicPiped;
+freeFormulaic: formulaicPiped pipeTerm?;
 
 formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
-formulaicPiped: formulaic piped? pipeTerm?;
-pipeTerm: changeCaught | return;
-changeCaught: '.';
-return: Bang;
+formulaicPiped: formulaic piped?;
+pipeTerm: term | ret| change;
+term: Dot;
+ret: Bang Bang;
+change: Bang;
+
 piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
 alias: Name Assign;
 
@@ -41,7 +41,7 @@ exceptional: matcher ParenOpen watch? (xCatch params | xCatch | params ) ParenCl
 
 patchDef: matcher snatch? pCatch? (batch hatch | batch | hatch);
 snatch: BraceOpen field BraceClose;
-pCatch: TableOpen type TableClose;
+pCatch: TableOpen (type | nulll) TableClose;
 
 batch: ParenOpen batchItem* ParenClose;
 batchItem: type? prot? priv? batchName nullable? mutable? unique? (Assign batchDefault)?;
@@ -55,9 +55,9 @@ batchName: Name;
 nulll: Nulll;
 
 hatch: CurlyOpen hatchItem* CurlyClose;
-hatchItem: formulaicPiped;
+hatchItem: formulaicPiped pipeTerm?;
 
-type: typeFormulaic | nulll | typeString | typeBoolean | typeTable |
+type: typeFormulaic | typeString | typeBoolean | typeTable |
 	(TypeCustom typeName) (ParenOpen formulaCallItem* ParenClose)?;
 typeTable: TypeTable;
 typeBoolean: TypeBoolean;
@@ -77,10 +77,11 @@ octalInteger: OctalInteger;
 
 path: pathOpen pathSection ((pathDirect | pathDig) pathSection)* PATH_Close;
 pathSection: pathName | pathField | pathName pathField;
-pathOpen: pathRelaOpen | pathRootOpen | pathCurrOpen;
-pathRelaOpen: PATH_Rela_Open;
+pathOpen: pathRelativeOpen | pathRootOpen | pathParentOpen | pathCurrentOpen;
+pathRelativeOpen: PATH_Relative_Open;
 pathRootOpen: PATH_Root_Open;
-pathCurrOpen: PATH_Curr_Open;
+pathParentOpen: PATH_Parent_Open;
+pathCurrentOpen: PATH_Current_Open;
 pathName: PATH_Name+;
 pathDirect: PATH_Dir;
 pathDig: PATH_Dig;
