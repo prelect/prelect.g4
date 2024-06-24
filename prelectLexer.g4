@@ -43,7 +43,7 @@ Decimal: '-'? [1-9] (
         | DecimalInteger ExponentPart?
     )?;
 
-Name: [\p{L}_-] [\p{L}\p{N}_-]*;
+Name: ([\p{L}_-] [\p{L}\p{N}_-]*) | '"' ~["\r\n\p{Zl}]*  '"';
 
 Dot: '.';
 
