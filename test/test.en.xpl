@@ -1,3 +1,1 @@
-#!/usr/bin/env prelect
-
-"howdy"()!
+08

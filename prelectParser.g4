@@ -8,26 +8,24 @@ freeFormulaic: formulaicPiped pipeTerm?;
 
 formulaDef: batch? CurlyOpen formulaicPiped CurlyClose;
 formulaicPiped: formulaic piped?;
-pipeTerm: term | ret| change;
-term: Dot;
-ret: Bang Bang;
-change: Bang;
+pipeTerm: replace | return;
+return: Bang Bang;
+replace: Bang;
 
 piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
-alias: Name Assign;
+alias: name Assign;
 
-formulaic: field | table | number | string | input | model | caught | placeholder | nulll | formulaCall | exceptional;
+formulaic: field | table | number | literal | message | input | model | caught | placeholder | nulll | formulaCall | exceptional;
 
-formulaCall: parentCall? formulaName formulaCallItem* ParenClose;
+formulaCall: formulaName formulaCallItem* ParenClose;
 formulaName: (field ParenOpen | FormulaChar+);
-formulaCallItem: (name Assign)? formulaic | pattern;
-parentCall: ParentCall;
+formulaCallItem: alias? formulaic | pattern;
 input: Input;
 model: Model;
 caught: Caught;
 placeholder: Placeholder;
 
-matcher: ((field | string | number | formulaCall | pattern | nulll ) Assign) | path;
+matcher: ((field | literal | number | formulaCall | pattern | nulll ) Assign) | path;
 
 table: (batch tableData) | batch | tableData;
 tableData: tableRow+;
@@ -67,7 +65,7 @@ typeName: Name;
 
 name: Name;
 module: Name;
-field: (module '.')? name;
+field: ParentCall* (module Dot)? name;
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
 decimalInteger: DecimalInteger;
@@ -92,6 +90,10 @@ pattern: PATTERN_Open (patternPart | patternField)* PATTERN_Close;
 patternPart: PATTERN_Part+;
 patternField: PATTERN_FieldOpen formulaic? CurlyClose;
 
-string: StringOpen (stringPart | stringField)* S_StringClose;
-stringPart: S_StringPart+;
-stringField: S_StringFieldOpen formulaic? CurlyClose;
+literal: LITERAL_OPEN (literalPart | literalField)* L_LiteralClose;
+literalPart: L_LiteralPart+;
+literalField: L_LiteralFieldOpen formulaic? CurlyClose;
+
+message: MESSAGE_OPEN messageContent M_MessageClose messageParams?;
+messageContent: M_MessageContent*;
+messageParams: batch;

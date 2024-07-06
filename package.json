@@ -10,6 +10,8 @@
     "tree": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -tree",
     "gui": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -gui",
     "test": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -tree",
+    "trace": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -trace",
+    "tokens": "antlr4-parse ./prelectLexer.g4 ./prelectParser.g4 parse ./test/test.en.xpl -tokens",
     "syntax": "node ./test/test.js"
   },
   "repository": {

@@ -11,7 +11,7 @@ ParenClose: ')';
 TableOpen: '[';
 TableClose: ']';
 
-FormulaChar: ('..' | [-~!@#$%^&_+*=<>?/]+) ParenOpen;
+FormulaChar: [-~!@#$%^&*_+=|\\./?]+ ParenOpen;
 
 Input: '%%%%';
 Model: '%%%';
@@ -19,6 +19,7 @@ Caught: '%%';
 Placeholder: '%';
 Star: '*';
 Bang: '!';
+Dot: '.';
 Assign: ':';
 CommaPipe: ',';
 SemicolonPipe: ';';
@@ -31,26 +32,15 @@ TypeTable: '#';
 TypeBoolean: '&';
 TypeString: '$';
 
-HexInteger: '-'? '0' [xX] HexDigit (HexDigit | ',')*;
-OctalInteger: '-'? '0' OctalDigit (OctalDigit | ',')*;
-DecimalInteger: '0' | [1-9] (DecimalDigit | ',')* | DecimalDigit+ ExponentPart;
+HexInteger: '-'? '0' [xX] [0-9a-fA-F]+;
+OctalInteger: '-'? '0' [0-7]+;
+DecimalInteger: '-'? ('0' ~[8-9] | [1-9]+);
 
-DecimalSigned: '-'? DecimalInteger;
+Decimal: '-'? [1-9] ('.' [0-9]* Exponent? | [0-9]+ Exponent? | [0-9] Exponent?);
 
-Decimal: '-'? [1-9] (
-        '.' DecimalDigit* ExponentPart?
-        | DecimalDigit+ ExponentPart?
-        | DecimalInteger ExponentPart?
-    )?;
+fragment Exponent: [eE] [+-]? [0-9]+;
 
 Name: ([\p{L}_-] [\p{L}\p{N}_-]*) | '"' ~["\r\n\p{Zl}]*  '"';
-
-Dot: '.';
-
-fragment DecimalDigit: [0-9];
-fragment HexDigit: [0-9a-fA-F];
-fragment OctalDigit: [0-7];
-fragment ExponentPart: [eE] [+-]? DecimalDigit+;
 
 Ws: [\p{White_Space}] -> skip;
 Comment: '##' ~[\r\n\p{Zl}]+ -> channel(COMMENTS);
@@ -65,9 +55,9 @@ PATH_Root_Open: '/' -> pushMode(PATH);
 PATH_Parent_Open: '../' -> pushMode(PATH);
 PATH_Current_Open: './' -> pushMode(PATH);
 
-PATTERN_Open: '^' -> pushMode(PATTERN);
-
-StringOpen: '`' -> pushMode(STRING);
+PATTERN_Open: '\\' -> pushMode(PATTERN);
+LITERAL_OPEN: '\'' -> pushMode(LITERAL);
+MESSAGE_OPEN: '`' -> pushMode(MESSAGE);
 
 mode PATH;
 PATH_Name: PATH_Literal+;
@@ -81,17 +71,22 @@ PATH_Close: ':' -> popMode;
 
 mode PATTERN;
 PATTERN_Part: PATTERN_Literal+;
-PATTERN_Esc: '\\^';
-PATTERN_FieldEsc: '\\{';
+PATTERN_Esc: '\'\\';
+PATTERN_FieldEsc: '\'{';
 PATTERN_FieldOpen: '{' -> pushMode(DEFAULT_MODE);
-PATTERN_Literal: PATTERN_Esc | PATTERN_FieldEsc | ~[^{];
+PATTERN_Literal: PATTERN_Esc | PATTERN_FieldEsc | ~[^{\\];
 PATTERN_Modifiers: [a-zA-Z];
-PATTERN_Close: '^' PATTERN_Modifiers* -> popMode;
+PATTERN_Close: '\\'  PATTERN_Modifiers* -> popMode;
 
-mode STRING;
-S_StringPart: S_StringLiteral+;
-S_StringEsc: '\\`';
-S_StringFieldEsc: '\\{';
-S_StringFieldOpen: '{' -> pushMode(DEFAULT_MODE);
-S_StringLiteral: S_StringEsc | S_StringFieldEsc | ~[`{];
-S_StringClose: '`' -> popMode;
+mode LITERAL;
+L_LiteralPart: L_LiteralLiteral+;
+L_LiteralEsc: '\'\'';
+L_LiteralFieldEsc: '\'{';
+L_LiteralFieldOpen: '{' -> pushMode(DEFAULT_MODE);
+L_LiteralLiteral: L_LiteralEsc | L_LiteralFieldEsc | ~['{];
+L_LiteralClose: '\'' -> popMode;
+
+mode MESSAGE;
+M_MessageEsc: '\'`';
+M_MessageContent: (M_MessageEsc | ~[`])+;
+M_MessageClose: '`' -> popMode;
