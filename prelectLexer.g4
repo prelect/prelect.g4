@@ -11,18 +11,19 @@ ParenClose: ')';
 TableOpen: '[';
 TableClose: ']';
 
-FormulaChar: [-~!@#$%^&*_+=|\\./?]+ ParenOpen;
+FormulaChar: [-~!@#$%^&*_+=|<\\./?]+ ParenOpen;
 
-Input: '%%%%';
-Model: '%%%';
-Caught: '%%';
+Input: '%%%%%';
+Model: '%%%%';
+Matched: '%%%';
+Context: '%%';
 Placeholder: '%';
 Star: '*';
 Bang: '!';
 Dot: '.';
 Assign: ':';
-CommaPipe: ',';
-SemicolonPipe: ';';
+Comma: ',';
+Semicolon: ';';
 ParentCall: '\\\\';
 
 Nulll: '~';
@@ -75,8 +76,7 @@ PATTERN_Esc: '\'\\';
 PATTERN_FieldEsc: '\'{';
 PATTERN_FieldOpen: '{' -> pushMode(DEFAULT_MODE);
 PATTERN_Literal: PATTERN_Esc | PATTERN_FieldEsc | ~[^{\\];
-PATTERN_Modifiers: [a-zA-Z];
-PATTERN_Close: '\\'  PATTERN_Modifiers* -> popMode;
+PATTERN_Close: '\\' -> popMode;
 
 mode LITERAL;
 L_LiteralPart: L_LiteralLiteral+;

@@ -12,36 +12,42 @@ pipeTerm: replace | return;
 return: Bang Bang;
 replace: Bang;
 
-piped: (CommaPipe | SemicolonPipe) alias? formulaicPiped;
+piped: (Comma | Semicolon) alias? formulaicPiped;
 alias: name Assign;
 
-formulaic: field | table | number | literal | message | input | model | caught | placeholder | nulll | formulaCall | exceptional;
+formulaic: field | table | number | literal | message | input | model | matched | context | placeholder | nulll | formulaCall | exceptional;
 
-formulaCall: formulaName formulaCallItem* ParenClose;
-formulaName: (field ParenOpen | FormulaChar+);
+formulaCall: formulaName formulaCallItem? (Comma formulaCallItem)* ParenClose;
+formulaName: (field ParenOpen | FormulaChar+ | braceFormula);
 formulaCallItem: alias? formulaic | pattern;
+braceFormula: ((assign | greaterThan) ParenOpen) | greaterEqual;
+assign: BraceClose BraceClose;
+greaterEqual: BraceClose FormulaChar;
+greaterThan: BraceClose;
+
 input: Input;
 model: Model;
-caught: Caught;
+matched: Matched;
+context: Context;
 placeholder: Placeholder;
 
 matcher: ((field | literal | number | formulaCall | pattern | nulll ) Assign) | path;
 
 table: (batch tableData) | batch | tableData;
 tableData: tableRow+;
-tableRow: TableOpen tableField* TableClose;
+tableRow: TableOpen tableField? (Comma tableField)* TableClose;
 tableField: formulaic;
 
-xCatch: tableRow;
-watch: BraceOpen formulaic BraceClose;
-params: ParenOpen ((name Assign)? formulaic)* ParenClose;
-exceptional: matcher ParenOpen watch? (xCatch params | xCatch | params ) ParenClose;
+xCatch: BraceOpen formulaic BraceClose;
+watch: TableOpen formulaic TableClose;
+params: ParenOpen (alias? formulaic)? (Comma alias? formulaic)* ParenClose;
+exceptional: matcher ParenOpen watch? xCatch? params? ParenClose;
 
-patchDef: matcher snatch? pCatch? (batch hatch | batch | hatch);
-snatch: BraceOpen field BraceClose;
-pCatch: TableOpen (type | nulll) TableClose;
+patchDef: matcher snatch? catchType? batch? hatch;
+snatch: TableOpen field TableClose;
+catchType: BraceOpen (type | nulll) BraceClose;
 
-batch: ParenOpen batchItem* ParenClose;
+batch: ParenOpen batchItem? (Comma batchItem)* ParenClose;
 batchItem: type? prot? priv? batchName nullable? mutable? unique? (Assign batchDefault)?;
 batchDefault: formulaic | formulaDef | nulll;
 prot: Bang;
@@ -56,7 +62,7 @@ hatch: CurlyOpen hatchItem* CurlyClose;
 hatchItem: formulaicPiped pipeTerm?;
 
 type: typeFormulaic | typeString | typeBoolean | typeTable |
-	(TypeCustom typeName) (ParenOpen formulaCallItem* ParenClose)?;
+	(TypeCustom typeName) (ParenOpen formulaCallItem? (Comma formulaCallItem)* ParenClose)?;
 typeTable: TypeTable;
 typeBoolean: TypeBoolean;
 typeString: TypeString;
@@ -65,7 +71,8 @@ typeName: Name;
 
 name: Name;
 module: Name;
-field: ParentCall* (module Dot)? name;
+parentCall: ParentCall;
+field: parentCall* (module Dot)? name;
 
 number: decimalInteger | decimal | hexInteger | octalInteger;
 decimalInteger: DecimalInteger;
@@ -85,7 +92,8 @@ pathDirect: PATH_Dir;
 pathDig: PATH_Dig;
 pathField: PATH_FieldOpen formulaic? CurlyClose;
 
-pattern: PATTERN_Open (patternPart | patternField)* PATTERN_Close;
+pattern: PATTERN_Open (patternPart | patternField)* PATTERN_Close patternModifiers?;
+patternModifiers: Name;
 
 patternPart: PATTERN_Part+;
 patternField: PATTERN_FieldOpen formulaic? CurlyClose;
@@ -94,6 +102,7 @@ literal: LITERAL_OPEN (literalPart | literalField)* L_LiteralClose;
 literalPart: L_LiteralPart+;
 literalField: L_LiteralFieldOpen formulaic? CurlyClose;
 
-message: MESSAGE_OPEN messageContent M_MessageClose messageParams?;
+message: MESSAGE_OPEN messageContent M_MessageClose locale? messageParams?;
 messageContent: M_MessageContent*;
+locale: BraceOpen formulaic BraceClose;
 messageParams: batch;
