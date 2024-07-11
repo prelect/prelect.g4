@@ -38,17 +38,18 @@ tableData: tableRow+;
 tableRow: TableOpen tableField? (Comma tableField)* TableClose;
 tableField: formulaic;
 
-xCatch: BraceOpen formulaic BraceClose;
-watch: TableOpen formulaic TableClose;
+catch_: BraceOpen formulaic BraceClose;
+snatch: TableOpen formulaic watch? TableClose;
+watch: Bang;
 params: ParenOpen (alias? formulaic)? (Comma alias? formulaic)* ParenClose;
-exceptional: matcher ParenOpen watch? xCatch? params? ParenClose;
+exceptional: matcher ParenOpen snatch? catch_? params? ParenClose;
 
-patchDef: matcher snatch? catchType? batch? hatch;
-snatch: TableOpen field TableClose;
+patchDef: matcher attach? catchType? batch? hatch annotation?;
+attach: TableOpen field TableClose;
 catchType: BraceOpen (type | nulll) BraceClose;
 
 batch: ParenOpen batchItem? (Comma batchItem)* ParenClose;
-batchItem: type? prot? priv? batchName nullable? mutable? unique? (Assign batchDefault)?;
+batchItem: type? prot? priv? batchName nullable? mutable? unique? (Assign batchDefault)? annotation?;
 batchDefault: formulaic | formulaDef | nulll;
 prot: Bang;
 priv: Bang;
@@ -79,6 +80,9 @@ decimalInteger: DecimalInteger;
 decimal: Decimal;
 hexInteger: HexInteger;
 octalInteger: OctalInteger;
+
+annotation: ANNOTATION_OPEN annotationContent ANNOTATION_CLOSE;
+annotationContent: ANNOTATION_CONTENT;
 
 path: pathOpen pathSection ((pathDirect | pathDig) pathSection)* PATH_Close;
 pathSection: pathName | pathField | pathName pathField;

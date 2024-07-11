@@ -1,6 +1,6 @@
 lexer grammar prelectLexer;
 
-channels { COMMENTS, ANNOTATIONS, HASHBANG }
+channels { COMMENTS, HASHBANG }
 
 BraceOpen: '<';
 BraceClose: '>';
@@ -44,9 +44,11 @@ fragment Exponent: [eE] [+-]? [0-9]+;
 Name: ([\p{L}_-] [\p{L}\p{N}_-]*) | '"' ~["\r\n\p{Zl}]*  '"';
 
 Ws: [\p{White_Space}] -> skip;
+
 Comment: '##' ~[\r\n\p{Zl}]+ -> channel(COMMENTS);
-Annotation: '#:' ~[\r\n\p{Zl}]+ -> channel(ANNOTATIONS);
 HashBang: '#!' ~[\r\n\p{Zl}]+ -> channel(HASHBANG);
+
+ANNOTATION_OPEN: '#:' -> pushMode(ANNOTATION);
 
 CurlyOpen: '{' -> pushMode(DEFAULT_MODE);
 CurlyClose: '}' -> popMode;
@@ -59,6 +61,10 @@ PATH_Current_Open: './' -> pushMode(PATH);
 PATTERN_Open: '\\' -> pushMode(PATTERN);
 LITERAL_OPEN: '\'' -> pushMode(LITERAL);
 MESSAGE_OPEN: '`' -> pushMode(MESSAGE);
+
+mode ANNOTATION;
+ANNOTATION_CONTENT: (':' ~[#] | ~[:])+;
+ANNOTATION_CLOSE: ':#' -> popMode;
 
 mode PATH;
 PATH_Name: PATH_Literal+;
