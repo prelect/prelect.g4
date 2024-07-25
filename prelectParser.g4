@@ -11,6 +11,8 @@ trainNext: Semicolon;
 
 formulaic: id | number;
 
+field: (id '.')? id;
+
 id: Id;
 
 number: int | dec | hex | oct;
