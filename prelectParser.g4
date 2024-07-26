@@ -4,15 +4,12 @@ options { tokenVocab = prelectLexer; }
 
 parse: formulaic* EOF;
 
-formulaicTrain: formulaic (train formulaic)*;
-train: trainPass | trainNext;
-trainPass: Comma;
-trainNext: Semicolon;
+formulaicTrain: formulaic (TrainLink formulaic)*;
 
-formulaic: id | number;
+formulaic: field | number;
 
-field: (id '.')? id;
-
+field: (module Dot)? id;
+module: Id;
 id: Id;
 
 number: int | dec | hex | oct;
