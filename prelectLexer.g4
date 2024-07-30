@@ -37,7 +37,7 @@ fragment Expo: [eE] [+-]? [0-9]+;
 
 Hex: '0' [xX] ('0' | [1-9a-fA-F] [0-9a-fA-F]*);
 Oct: '0' [0-7] [_0-7]*;
-Int: '0' ~[0-9] | ([+-]? [1-9] [0-9]*);
+Int: '0' ~[()0-9] | ([+-]? [1-9] [0-9]*);
 
 NameShort: [_\p{L}\p{N}]+;
 NameQuoteOpen: '"' -> pushMode(NAME_QUOTE);

@@ -38,7 +38,10 @@ formulaicTrain: formulaic (TrainLink formulaic)*;
 
 formulaic: formulaCall | table | field | number;
 
-table: batch;
+table: batch? tableData;
+tableData: tableRow+;
+tableRow: BrackOpen tableField? (Comma tableField)* BrackClose;
+tableField: formulaic;
 
 field: (parent Dot)? id;
 parent: name;
